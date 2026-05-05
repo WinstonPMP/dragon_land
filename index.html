@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dragon Bastion: Last Stand - Download Now</title>
-    <meta http-equiv="refresh" content="2; url=https://apps.apple.com/app/id6762636249">
-    <meta name="description" content="Epic Tower Defense Empire War. Defend the Emperor against dark wizards in 20 epic levels. Free on App Store.">
+    <meta name="description" content="Epic Tower Defense Empire War. Defend the Emperor against dark wizards in 20 epic levels. Free on App Store and Google Play.">
     
     <!-- Open Graph tags for social sharing -->
     <meta property="og:title" content="Dragon Bastion: Last Stand">
@@ -67,23 +66,41 @@
             line-height: 1.6;
         }
         
+        .download-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
         .download-btn {
-            display: inline-block;
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             color: white;
-            padding: 18px 50px;
+            padding: 16px 40px;
             text-decoration: none;
             border-radius: 50px;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: bold;
-            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s, box-shadow 0.3s;
-            margin-bottom: 30px;
+            min-width: 280px;
+        }
+        
+        .ios-btn {
+            background: linear-gradient(45deg, #007aff, #0051d5);
+        }
+        
+        .android-btn {
+            background: linear-gradient(45deg, #34a853, #1e7e34);
         }
         
         .download-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
         }
         
         .features {
@@ -91,7 +108,7 @@
             justify-content: center;
             gap: 30px;
             flex-wrap: wrap;
-            margin-top: 30px;
+            margin-top: 20px;
         }
         
         .feature {
@@ -103,6 +120,7 @@
             margin-top: 30px;
             font-size: 14px;
             color: #999;
+            min-height: 20px;
         }
         
         .spinner {
@@ -124,7 +142,7 @@
         @media (max-width: 480px) {
             .logo { font-size: 36px; }
             .subtitle { font-size: 14px; }
-            .download-btn { padding: 15px 35px; font-size: 16px; }
+            .download-btn { padding: 14px 30px; font-size: 15px; min-width: 250px; }
             .features { gap: 15px; }
         }
     </style>
@@ -135,9 +153,14 @@
         <p class="subtitle">⚔️ LAST STAND ⚔️</p>
         <p class="tagline">Epic Tower Defense Empire War<br>Defend the Emperor in 20 Epic Levels!</p>
         
-        <a href="https://apps.apple.com/app/id6762636249" class="download-btn">
-            📱 Download on App Store
-        </a>
+        <div class="download-buttons" id="buttons">
+            <a href="https://apps.apple.com/app/id6762636249" class="download-btn ios-btn" id="iosBtn">
+                📱 Download on App Store
+            </a>
+            <a href="https://play.google.com/store/apps/details?id=com.dragonsiege.game" class="download-btn android-btn" id="androidBtn">
+                🤖 Get it on Google Play
+            </a>
+        </div>
         
         <div class="features">
             <div class="feature">✓ 100% Free</div>
@@ -145,17 +168,53 @@
             <div class="feature">✓ No Pay-to-Win</div>
         </div>
         
-        <p class="loading">
-            <span class="spinner"></span>
-            Redirecting to App Store...
-        </p>
+        <p class="loading" id="loadingText"></p>
     </div>
 
     <script>
-        // Backup redirect after 2 seconds
-        setTimeout(function() {
-            window.location.href = 'https://apps.apple.com/app/id6762636249';
-        }, 2000);
+        // Detect device and redirect
+        (function() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const iosUrl = 'https://apps.apple.com/app/id6762636249';
+            const androidUrl = 'https://play.google.com/store/apps/details?id=com.dragonsiege.game';
+            const loadingText = document.getElementById('loadingText');
+            const iosBtn = document.getElementById('iosBtn');
+            const androidBtn = document.getElementById('androidBtn');
+            
+            // Detect iOS (iPhone, iPad, iPod)
+            const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+            
+            // Detect Android
+            const isAndroid = /android/i.test(userAgent);
+            
+            // Detect Mac (also send to App Store)
+            const isMac = /Macintosh|MacIntel|MacPPC|Mac68K/.test(userAgent);
+            
+            if (isIOS) {
+                // iOS user - hide Android button, redirect to App Store
+                androidBtn.style.display = 'none';
+                loadingText.innerHTML = '<span class="spinner"></span>Redirecting to App Store...';
+                setTimeout(function() {
+                    window.location.href = iosUrl;
+                }, 2000);
+            } else if (isAndroid) {
+                // Android user - hide iOS button, redirect to Play Store
+                iosBtn.style.display = 'none';
+                loadingText.innerHTML = '<span class="spinner"></span>Redirecting to Google Play...';
+                setTimeout(function() {
+                    window.location.href = androidUrl;
+                }, 2000);
+            } else if (isMac) {
+                // Mac user - show App Store option
+                loadingText.innerHTML = '<span class="spinner"></span>Redirecting to App Store...';
+                setTimeout(function() {
+                    window.location.href = iosUrl;
+                }, 2000);
+            } else {
+                // Desktop/Other - show both buttons, no auto-redirect
+                loadingText.innerHTML = 'Choose your platform above ⬆️';
+            }
+        })();
     </script>
 </body>
 </html>
